@@ -1,0 +1,9 @@
+{
+  "short_name": "Gulmohar Resort",
+  "name": "Gulmohar Resort Billing System",
+  "icons": [],
+  "start_url": ".",
+  "display": "standalone",
+  "theme_color": "#32802f",
+  "background_color": "#ffffff"
+}
