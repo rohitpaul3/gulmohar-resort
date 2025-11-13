@@ -7,8 +7,7 @@ import {
   DollarSign, 
   TrendingUp, 
   Users,
-  Calendar,
-  IndianRupee
+  Calendar
 } from 'lucide-react';
 import { billsAPI } from '../utils/api';
 import moment from 'moment';
