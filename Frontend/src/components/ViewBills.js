@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect } from 'react';
 import { billsAPI } from '../utils/api';
 import { generateBillPDF } from '../utils/pdfGenerator';
 import { 
