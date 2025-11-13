@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { billsAPI } from '../utils/api';
 import { generateBillPDF } from '../utils/pdfGenerator';
 import { Save, Download, Calculator } from 'lucide-react';
-import moment from 'moment';
 
 const CreateBill = () => {
   const [formData, setFormData] = useState({
@@ -73,7 +72,7 @@ const CreateBill = () => {
   // Recalculate tax whenever room, food, or other charges change
   React.useEffect(() => {
     calculateTax();
-  }, [formData.roomCharges, formData.foodCharges, formData.otherCharges]);
+  }, [formData.roomCharges, formData.foodCharges, formData.otherCharges, calculateTax]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();

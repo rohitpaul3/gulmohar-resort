@@ -39,7 +39,7 @@ const MonthlySummary = () => {
     if (selectedMonth && selectedYear) {
       fetchSummary();
     }
-  }, [selectedMonth, selectedYear]);
+  }, [selectedMonth, selectedYear, fetchSummary]);
 
   const fetchSummary = async () => {
     try {

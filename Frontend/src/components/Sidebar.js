@@ -54,9 +54,9 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }) => {
                   <Logo className="h-12 w-auto" showText={false} />
                 </div>
                 <nav className="flex flex-1 flex-col">
-                  <ul role="list" className="flex flex-1 flex-col gap-y-7">
+                  <ul className="flex flex-1 flex-col gap-y-7">
                     <li>
-                      <ul role="list" className="-mx-2 space-y-1">
+                      <ul className="-mx-2 space-y-1">
                         {navigation.map((item, index) => (
                           <li key={item.name} className="animate-fadeIn" style={{animationDelay: `${index * 0.1}s`}}>
                             <Link
@@ -98,9 +98,9 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }) => {
             <Logo className="h-12 w-auto" showText={false} />
           </div>
           <nav className="flex flex-1 flex-col">
-            <ul role="list" className="flex flex-1 flex-col gap-y-7">
+            <ul className="flex flex-1 flex-col gap-y-7">
               <li>
-                <ul role="list" className="-mx-2 space-y-1">
+                <ul className="-mx-2 space-y-1">
                   {navigation.map((item, index) => (
                     <li key={item.name} className="animate-fadeIn" style={{animationDelay: `${index * 0.1}s`}}>
                       <Link

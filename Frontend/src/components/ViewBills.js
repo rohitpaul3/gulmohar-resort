@@ -5,8 +5,6 @@ import {
   Search, 
   Download, 
   Eye, 
-  Calendar,
-  Filter,
   RefreshCw
 } from 'lucide-react';
 import moment from 'moment';
@@ -28,7 +26,7 @@ const ViewBills = () => {
 
   useEffect(() => {
     filterBills();
-  }, [bills, searchTerm, dateFilter, roomFilter]);
+  }, [bills, searchTerm, dateFilter, roomFilter, filterBills]);
 
   const fetchBills = async () => {
     try {
