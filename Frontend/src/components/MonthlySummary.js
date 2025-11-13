@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { summaryAPI } from '../utils/api';
 import { generateMonthlySummaryPDF } from '../utils/pdfGenerator';
 import { 
@@ -35,25 +35,24 @@ const MonthlySummary = () => {
 
   const years = Array.from({ length: 10 }, (_, i) => moment().year() - 5 + i);
 
-  useEffect(() => {
-    if (selectedMonth && selectedYear) {
-      fetchSummary();
-    }
-  }, [selectedMonth, selectedYear, fetchSummary]);
-
-  const fetchSummary = async () => {
+  const fetchSummary = React.useCallback(async () => {
     try {
       setLoading(true);
       const response = await summaryAPI.getMonthly(selectedMonth, selectedYear);
       setSummaryData(response.data);
     } catch (error) {
       console.error('Error fetching summary:', error);
-      alert('Failed to fetch monthly summary');
-      setSummaryData(null);
+      alert('Failed to fetch summary');
     } finally {
       setLoading(false);
     }
-  };
+  }, [selectedMonth, selectedYear]);
+
+  useEffect(() => {
+    if (selectedMonth && selectedYear) {
+      fetchSummary();
+    }
+  }, [selectedMonth, selectedYear, fetchSummary]);
 
   const handleDownloadPDF = async () => {
     if (summaryData) {

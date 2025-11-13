@@ -49,7 +49,7 @@ const CreateBill = () => {
     }
   };
 
-  const calculateTax = () => {
+  const calculateTax = React.useCallback(() => {
     const roomCharges = parseFloat(formData.roomCharges) || 0;
     const foodCharges = parseFloat(formData.foodCharges) || 0;
     const otherCharges = parseFloat(formData.otherCharges) || 0;
@@ -67,12 +67,12 @@ const CreateBill = () => {
       totalTax: parseFloat(totalTax.toFixed(2)),
       grandTotal: parseFloat(grandTotal.toFixed(2))
     });
-  };
+  }, [formData.roomCharges, formData.foodCharges, formData.otherCharges]);
 
   // Recalculate tax whenever room, food, or other charges change
   React.useEffect(() => {
     calculateTax();
-  }, [formData.roomCharges, formData.foodCharges, formData.otherCharges, calculateTax]);
+  }, [calculateTax]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();

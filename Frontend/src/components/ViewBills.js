@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { billsAPI } from '../utils/api';
 import { generateBillPDF } from '../utils/pdfGenerator';
 import { 
@@ -24,10 +24,6 @@ const ViewBills = () => {
     fetchBills();
   }, []);
 
-  useEffect(() => {
-    filterBills();
-  }, [bills, searchTerm, dateFilter, roomFilter, filterBills]);
-
   const fetchBills = async () => {
     try {
       setLoading(true);
@@ -41,7 +37,7 @@ const ViewBills = () => {
     }
   };
 
-  const filterBills = () => {
+  const filterBills = React.useCallback(() => {
     let filtered = [...bills];
 
     // Search filter
@@ -70,7 +66,11 @@ const ViewBills = () => {
     filtered.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
 
     setFilteredBills(filtered);
-  };
+  }, [bills, searchTerm, dateFilter, roomFilter]);
+
+  useEffect(() => {
+    filterBills();
+  }, [filterBills]);
 
   const handleDownloadPDF = async (bill) => {
     // Ensure roomCharges exists for older bills
