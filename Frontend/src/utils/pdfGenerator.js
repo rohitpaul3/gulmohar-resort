@@ -210,6 +210,29 @@ export const generateBillPDF = async (billData) => {
   doc.text('TOTAL AMOUNT', 22, yPosition + 3);
   doc.text(`Rs ${billData.grandTotal.toFixed(2)}`, 180, yPosition + 3, { align: 'right' });
 
+  // Payment Details Section
+  yPosition += 20;
+  
+  // Advance Amount
+  doc.setFillColor(220, 237, 220);
+  doc.rect(20, yPosition - 3, 170, 10, 'F');
+  doc.setFont('helvetica', 'bold');
+  doc.setFontSize(10);
+  doc.setTextColor(27, 94, 32);
+  doc.text('ADVANCE AMOUNT', 22, yPosition + 3);
+  doc.text(`Rs ${(billData.advanceAmount || 0).toFixed(2)}`, 180, yPosition + 3, { align: 'right' });
+
+  yPosition += 12;
+
+  // Due Amount
+  doc.setFillColor(255, 235, 238);
+  doc.rect(20, yPosition - 3, 170, 10, 'F');
+  doc.setFont('helvetica', 'bold');
+  doc.setFontSize(10);
+  doc.setTextColor(198, 40, 40);
+  doc.text('DUE AMOUNT', 22, yPosition + 3);
+  doc.text(`Rs ${(billData.dueAmount || 0).toFixed(2)}`, 180, yPosition + 3, { align: 'right' });
+
   // Footer
   yPosition += 30;
   doc.setTextColor(0, 0, 0);

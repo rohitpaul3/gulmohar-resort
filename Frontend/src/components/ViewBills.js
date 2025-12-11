@@ -128,17 +128,18 @@ const ViewBills = () => {
     <div className="space-y-6 animate-fadeIn">
       {/* Page header */}
       <div className="flex justify-between items-center animate-slideInLeft">
-        <div>
-          <h1 className="text-3xl font-bold text-gray-900 bg-gradient-to-r from-gulmohar-600 to-gulmohar-800 bg-clip-text text-transparent">
+        <div className="bg-gradient-to-r from-blue-50 to-blue-100 rounded-xl p-6 border border-blue-200 shadow-lg flex-1 mr-4">
+          <h1 className="text-4xl font-bold text-transparent bg-gradient-to-r from-blue-600 to-blue-800 bg-clip-text">
             View Bills
           </h1>
-          <p className="mt-2 text-sm text-gray-600">
+          <p className="mt-3 text-sm text-gray-600 flex items-center">
+            <span className="inline-block w-1 h-1 bg-blue-600 rounded-full mr-2"></span>
             Manage and download previous bills
           </p>
         </div>
         <button
           onClick={fetchBills}
-          className="btn-secondary interactive"
+          className="btn-secondary interactive shadow-lg hover:shadow-xl transition-all duration-300"
         >
           <RefreshCw className="h-4 w-4 mr-2" />
           Refresh
@@ -243,10 +244,10 @@ const ViewBills = () => {
       </div>
 
       {/* Bills Table */}
-      <div className="card p-0 animate-scaleIn">
+      <div className="card p-0 animate-scaleIn shadow-xl hover:shadow-2xl transition-all duration-300">
         {filteredBills.length > 0 ? (
           <div className="overflow-x-auto">
-            <table className="table">
+            <table className="table hover:bg-gray-50 transition-colors">
               <thead>
                 <tr>
                   <th>Bill No</th>
@@ -265,8 +266,8 @@ const ViewBills = () => {
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-200">
-                {filteredBills.map((bill) => (
-                  <tr key={bill.id} className="hover:bg-gray-50">
+                {filteredBills.map((bill, index) => (
+                  <tr key={bill._id} className="hover:bg-gradient-to-r hover:from-blue-50 hover:to-blue-100 transition-all duration-300 animate-fadeIn" style={{animationDelay: `${index * 0.05}s`}}>
                     <td className="font-medium text-gulmohar">{bill.billNumber}</td>
                     <td>
                       <div className="text-sm">

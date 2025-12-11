@@ -217,12 +217,15 @@ const CreateBill = () => {
     <div className="max-w-4xl mx-auto space-y-6 animate-fadeIn">
       {/* Page header */}
       <div className="animate-slideInLeft">
-        <h1 className="text-3xl font-bold text-gray-900 bg-gradient-to-r from-gulmohar-600 to-gulmohar-800 bg-clip-text text-transparent">
-          Create New Bill
-        </h1>
-        <p className="mt-2 text-sm text-gray-600">
-          Generate a new bill for customer checkout
-        </p>
+        <div className="bg-gradient-to-r from-gulmohar-50 to-gulmohar-100 rounded-xl p-6 border border-gulmohar-200 shadow-lg">
+          <h1 className="text-4xl font-bold text-transparent bg-gradient-to-r from-gulmohar-600 to-gulmohar-800 bg-clip-text">
+            Create New Bill
+          </h1>
+          <p className="mt-3 text-sm text-gray-600 flex items-center">
+            <span className="inline-block w-1 h-1 bg-gulmohar-600 rounded-full mr-2"></span>
+            Generate a new bill for customer checkout
+          </p>
+        </div>
       </div>
 
       <form onSubmit={handleSubmit} className="space-y-6">
@@ -230,8 +233,11 @@ const CreateBill = () => {
           {/* Main form */}
           <div className="lg:col-span-2 space-y-6 animate-slideInLeft">
             {/* Customer Information */}
-            <div className="card transform-hover">
-              <h2 className="text-lg font-semibold text-gray-900 mb-4">Customer Information</h2>
+            <div className="card transform-hover border-l-4 border-gulmohar-600 shadow-lg hover:shadow-xl transition-all duration-300">
+              <div className="flex items-center mb-4">
+                <div className="w-1 h-6 bg-gradient-to-b from-gulmohar-600 to-gulmohar-400 rounded mr-3"></div>
+                <h2 className="text-lg font-bold text-gray-900">Customer Information</h2>
+              </div>
               
               {/* Customer Names */}
               <div className="mb-4">
@@ -368,8 +374,11 @@ const CreateBill = () => {
             </div>
 
             {/* Charges */}
-            <div className="card transform-hover border-animated">
-              <h2 className="text-lg font-semibold text-gray-900 mb-4">Charges</h2>
+            <div className="card transform-hover border-l-4 border-blue-600 shadow-lg hover:shadow-xl transition-all duration-300 animate-slideInUp">
+              <div className="flex items-center mb-4">
+                <div className="w-1 h-6 bg-gradient-to-b from-blue-600 to-blue-400 rounded mr-3"></div>
+                <h2 className="text-lg font-bold text-gray-900">Charges</h2>
+              </div>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                 <div>
                   <label htmlFor="roomCharges" className="block text-sm font-medium text-gray-700">
@@ -425,8 +434,11 @@ const CreateBill = () => {
             </div>
 
             {/* Advance & Due Amount */}
-            <div className="card transform-hover border-animated">
-              <h2 className="text-lg font-semibold text-gray-900 mb-4">Payment Details</h2>
+            <div className="card transform-hover border-l-4 border-green-600 shadow-lg hover:shadow-xl transition-all duration-300 animate-slideInUp">
+              <div className="flex items-center mb-4">
+                <div className="w-1 h-6 bg-gradient-to-b from-green-600 to-green-400 rounded mr-3"></div>
+                <h2 className="text-lg font-bold text-gray-900">Payment Details</h2>
+              </div>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
                   <label htmlFor="advanceAmount" className="block text-sm font-medium text-gray-700">
@@ -465,8 +477,11 @@ const CreateBill = () => {
             </div>
 
             {/* Address Information */}
-            <div className="card transform-hover">
-              <h2 className="text-lg font-semibold text-gray-900 mb-4">Address Information</h2>
+            <div className="card transform-hover border-l-4 border-purple-600 shadow-lg hover:shadow-xl transition-all duration-300 animate-slideInUp">
+              <div className="flex items-center mb-4">
+                <div className="w-1 h-6 bg-gradient-to-b from-purple-600 to-purple-400 rounded mr-3"></div>
+                <h2 className="text-lg font-bold text-gray-900">Address Information</h2>
+              </div>
               <div className="space-y-4">
                 <div>
                   <label htmlFor="address" className="block text-sm font-medium text-gray-700">
