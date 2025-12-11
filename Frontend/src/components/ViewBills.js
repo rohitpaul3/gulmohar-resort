@@ -308,7 +308,7 @@ const ViewBills = () => {
                           <Download className="h-4 w-4" />
                         </button>
                         <button
-                          onClick={() => handleDeleteBill(bill.id, bill.billNumber)}
+                          onClick={() => handleDeleteBill(bill._id, bill.billNumber)}
                           className="p-2 text-red-600 hover:text-red-800 hover:bg-red-50 rounded-lg interactive transform-hover"
                           title="Delete Bill"
                         >
