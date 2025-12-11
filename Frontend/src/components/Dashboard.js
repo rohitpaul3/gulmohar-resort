@@ -9,7 +9,7 @@ import {
   Users,
   Calendar,
   Trash2,
-  Grid3x3
+  CalendarDays
 } from 'lucide-react';
 import { billsAPI } from '../utils/api';
 import moment from 'moment';
@@ -116,7 +116,7 @@ const Dashboard = () => {
       name: 'Room Calendar',
       description: 'View availability and bookings',
       href: '/calendar',
-      icon: Grid3x3,
+      icon: CalendarDays,
       color: 'bg-cyan-600 hover:bg-cyan-700 text-white'
     },
     {
