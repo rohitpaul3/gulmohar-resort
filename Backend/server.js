@@ -76,13 +76,20 @@ app.post('/api/bills', async (req, res) => {
   try {
     const {
       customerName,
+      customerNames,
       roomNumber,
+      roomNumbers,
       mobileNo,
       roomCharges,
       foodCharges,
       otherCharges,
       checkInDate,
-      checkOutDate
+      checkOutDate,
+      address,
+      city,
+      state,
+      pincode,
+      billNumber
     } = req.body;
 
     // Validate required fields
@@ -95,15 +102,21 @@ app.post('/api/bills', async (req, res) => {
 
     const newBill = new Bill({
       customerName,
+      customerNames: customerNames || [customerName],
       roomNumber,
+      roomNumbers: roomNumbers || [roomNumber],
       mobileNo,
       roomCharges: parseFloat(roomCharges) || 0,
       foodCharges: parseFloat(foodCharges) || 0,
       otherCharges: parseFloat(otherCharges) || 0,
       checkInDate: checkInDate ? new Date(checkInDate) : null,
       checkOutDate: checkOutDate ? new Date(checkOutDate) : null,
+      address: address || '',
+      city: city || '',
+      state: state || '',
+      pincode: pincode || '',
       ...taxes,
-      billNumber: `GR${Date.now()}`
+      billNumber: billNumber || `GR${Date.now()}`
     });
 
     const savedBill = await newBill.save();
@@ -181,6 +194,22 @@ app.post('/api/expenditures', async (req, res) => {
   } catch (error) {
     console.error('Error creating expenditure:', error);
     res.status(500).json({ error: 'Failed to create expenditure' });
+  }
+});
+
+// Delete bill
+app.delete('/api/bills/:id', async (req, res) => {
+  try {
+    const deletedBill = await Bill.findByIdAndDelete(req.params.id);
+    
+    if (!deletedBill) {
+      return res.status(404).json({ error: 'Bill not found' });
+    }
+
+    res.json({ message: 'Bill deleted successfully' });
+  } catch (error) {
+    console.error('Error deleting bill:', error);
+    res.status(500).json({ error: 'Failed to delete bill' });
   }
 });
 

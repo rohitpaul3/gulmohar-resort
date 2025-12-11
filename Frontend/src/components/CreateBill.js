@@ -1,18 +1,23 @@
 import React, { useState } from 'react';
 import { billsAPI } from '../utils/api';
 import { generateBillPDF } from '../utils/pdfGenerator';
-import { Save, Download, Calculator } from 'lucide-react';
+import { Save, Download, Calculator, Plus, X } from 'lucide-react';
+import moment from 'moment';
 
 const CreateBill = () => {
   const [formData, setFormData] = useState({
-    customerName: '',
-    roomNumber: '',
+    customerNames: [''],
+    roomNumbers: [],
     mobileNo: '',
     roomCharges: '',
     foodCharges: '',
     otherCharges: '',
     checkInDate: '',
-    checkOutDate: ''
+    checkOutDate: '',
+    address: '',
+    city: '',
+    state: '',
+    pincode: ''
   });
   
   const [loading, setLoading] = useState(false);
@@ -23,6 +28,13 @@ const CreateBill = () => {
     totalTax: 0,
     grandTotal: 0
   });
+
+  // Generate date-based serial number
+  const generateSerialNumber = () => {
+    const date = moment().format('DDMMYY');
+    const time = moment().format('HHmmss');
+    return `GR${date}${time}`;
+  };
 
   const roomOptions = [
     { value: '', label: 'Select Room Number' },
@@ -47,6 +59,46 @@ const CreateBill = () => {
     if (name === 'roomCharges' || name === 'foodCharges' || name === 'otherCharges') {
       calculateTax();
     }
+  };
+
+  const handleCustomerNameChange = (index, value) => {
+    const newCustomerNames = [...formData.customerNames];
+    newCustomerNames[index] = value;
+    setFormData(prev => ({
+      ...prev,
+      customerNames: newCustomerNames
+    }));
+  };
+
+  const addCustomerName = () => {
+    setFormData(prev => ({
+      ...prev,
+      customerNames: [...prev.customerNames, '']
+    }));
+  };
+
+  const removeCustomerName = (index) => {
+    setFormData(prev => ({
+      ...prev,
+      customerNames: prev.customerNames.filter((_, i) => i !== index)
+    }));
+  };
+
+  const handleRoomNumberChange = (e) => {
+    const selectedRoom = e.target.value;
+    if (selectedRoom && !formData.roomNumbers.includes(selectedRoom)) {
+      setFormData(prev => ({
+        ...prev,
+        roomNumbers: [...prev.roomNumbers, selectedRoom]
+      }));
+    }
+  };
+
+  const removeRoomNumber = (roomToRemove) => {
+    setFormData(prev => ({
+      ...prev,
+      roomNumbers: prev.roomNumbers.filter(room => room !== roomToRemove)
+    }));
   };
 
   const calculateTax = React.useCallback(() => {
@@ -78,12 +130,13 @@ const CreateBill = () => {
     e.preventDefault();
     
     // Validation
-    if (!formData.customerName.trim()) {
-      alert('Customer name is required');
+    const validCustomerNames = formData.customerNames.filter(name => name.trim());
+    if (validCustomerNames.length === 0) {
+      alert('At least one customer name is required');
       return;
     }
-    if (!formData.roomNumber) {
-      alert('Please select a room number');
+    if (formData.roomNumbers.length === 0) {
+      alert('Please select at least one room number');
       return;
     }
     if (!formData.mobileNo.trim()) {
@@ -97,8 +150,15 @@ const CreateBill = () => {
 
     try {
       setLoading(true);
-      console.log('Form data being sent to API:', formData);
-      const response = await billsAPI.create(formData);
+      const billData = {
+        ...formData,
+        customerNames: validCustomerNames,
+        customerName: validCustomerNames.join(', '), // For backward compatibility
+        roomNumber: formData.roomNumbers.join(', '), // For backward compatibility
+        billNumber: generateSerialNumber()
+      };
+      console.log('Form data being sent to API:', billData);
+      const response = await billsAPI.create(billData);
       const newBill = response.data;
       console.log('Bill received from API:', newBill);
       
@@ -109,14 +169,18 @@ const CreateBill = () => {
       
       // Reset form
       setFormData({
-        customerName: '',
-        roomNumber: '',
+        customerNames: [''],
+        roomNumbers: [],
         mobileNo: '',
         roomCharges: '',
         foodCharges: '',
         otherCharges: '',
         checkInDate: '',
-        checkOutDate: ''
+        checkOutDate: '',
+        address: '',
+        city: '',
+        state: '',
+        pincode: ''
       });
       
     } catch (error) {
@@ -128,15 +192,19 @@ const CreateBill = () => {
   };
 
   const handlePreviewPDF = async () => {
-    if (!formData.customerName.trim() || !formData.roomNumber) {
-      alert('Please fill in customer name and room number to preview');
+    const validCustomerNames = formData.customerNames.filter(name => name.trim());
+    if (validCustomerNames.length === 0 || formData.roomNumbers.length === 0) {
+      alert('Please fill in at least one customer name and select at least one room to preview');
       return;
     }
 
     const previewData = {
       ...formData,
+      customerNames: validCustomerNames,
+      customerName: validCustomerNames.join(', '),
+      roomNumber: formData.roomNumbers.join(', '),
       ...calculatedTax,
-      billNumber: `GR${Date.now()}`,
+      billNumber: generateSerialNumber(),
       createdAt: new Date().toISOString()
     };
 
@@ -162,66 +230,111 @@ const CreateBill = () => {
             {/* Customer Information */}
             <div className="card transform-hover">
               <h2 className="text-lg font-semibold text-gray-900 mb-4">Customer Information</h2>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div>
-                  <label htmlFor="customerName" className="block text-sm font-medium text-gray-700">
-                    Customer Name *
-                  </label>
-                  <input
-                    type="text"
-                    name="customerName"
-                    id="customerName"
-                    required
-                    value={formData.customerName}
-                    onChange={handleInputChange}
-                    className="form-input mt-1"
-                    placeholder="Enter customer name"
-                  />
+              
+              {/* Customer Names */}
+              <div className="mb-4">
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Customer Names *
+                </label>
+                <div className="space-y-2">
+                  {formData.customerNames.map((name, index) => (
+                    <div key={index} className="flex gap-2">
+                      <input
+                        type="text"
+                        value={name}
+                        onChange={(e) => handleCustomerNameChange(index, e.target.value)}
+                        className="form-input flex-1"
+                        placeholder={`Customer name ${index + 1}`}
+                      />
+                      {formData.customerNames.length > 1 && (
+                        <button
+                          type="button"
+                          onClick={() => removeCustomerName(index)}
+                          className="p-2 text-red-600 hover:bg-red-50 rounded-lg interactive"
+                          title="Remove customer"
+                        >
+                          <X className="h-5 w-5" />
+                        </button>
+                      )}
+                    </div>
+                  ))}
                 </div>
-                
-                <div>
-                  <label htmlFor="mobileNo" className="block text-sm font-medium text-gray-700">
-                    Mobile Number *
-                  </label>
-                  <input
-                    type="tel"
-                    name="mobileNo"
-                    id="mobileNo"
-                    required
-                    pattern="[0-9]{10}"
-                    value={formData.mobileNo}
-                    onChange={handleInputChange}
-                    className="form-input mt-1"
-                    placeholder="Enter 10-digit mobile number"
-                  />
-                </div>
+                <button
+                  type="button"
+                  onClick={addCustomerName}
+                  className="mt-2 flex items-center text-gulmohar hover:text-gulmohar text-sm font-medium interactive"
+                >
+                  <Plus className="h-4 w-4 mr-1" />
+                  Add Another Customer
+                </button>
+              </div>
+
+              {/* Mobile Number */}
+              <div className="mb-4">
+                <label htmlFor="mobileNo" className="block text-sm font-medium text-gray-700">
+                  Mobile Number *
+                </label>
+                <input
+                  type="tel"
+                  name="mobileNo"
+                  id="mobileNo"
+                  required
+                  pattern="[0-9]{10}"
+                  value={formData.mobileNo}
+                  onChange={handleInputChange}
+                  className="form-input mt-1"
+                  placeholder="Enter 10-digit mobile number"
+                />
               </div>
             </div>
 
             {/* Room Information */}
             <div className="card transform-hover">
               <h2 className="text-lg font-semibold text-gray-900 mb-4">Room Information</h2>
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                <div>
-                  <label htmlFor="roomNumber" className="block text-sm font-medium text-gray-700">
-                    Room Number *
-                  </label>
-                  <select
-                    name="roomNumber"
-                    id="roomNumber"
-                    required
-                    value={formData.roomNumber}
-                    onChange={handleInputChange}
-                    className="form-select mt-1"
-                  >
-                    {roomOptions.map(option => (
-                      <option key={option.value} value={option.value}>
-                        {option.label}
-                      </option>
-                    ))}
-                  </select>
-                </div>
+              
+              {/* Room Selection */}
+              <div className="mb-4">
+                <label htmlFor="roomNumber" className="block text-sm font-medium text-gray-700 mb-2">
+                  Select Rooms *
+                </label>
+                <select
+                  id="roomNumber"
+                  onChange={handleRoomNumberChange}
+                  className="form-select"
+                  defaultValue=""
+                >
+                  <option value="">Add a room...</option>
+                  {roomOptions.slice(1).map(option => (
+                    <option key={option.value} value={option.value}>
+                      {option.label}
+                    </option>
+                  ))}
+                </select>
                 
+                {/* Selected Rooms */}
+                {formData.roomNumbers.length > 0 && (
+                  <div className="mt-3 flex flex-wrap gap-2">
+                    {formData.roomNumbers.map((room) => (
+                      <div
+                        key={room}
+                        className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-gulmohar text-white"
+                      >
+                        {room}
+                        <button
+                          type="button"
+                          onClick={() => removeRoomNumber(room)}
+                          className="ml-2 hover:opacity-80 interactive"
+                        >
+                          <X className="h-4 w-4" />
+                        </button>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+
+              {/* Check-in and Check-out Dates */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
                   <label htmlFor="checkInDate" className="block text-sm font-medium text-gray-700">
                     Check-in Date
@@ -305,6 +418,74 @@ const CreateBill = () => {
                     className="form-input mt-1"
                     placeholder="0.00"
                   />
+                </div>
+              </div>
+            </div>
+
+            {/* Address Information */}
+            <div className="card transform-hover">
+              <h2 className="text-lg font-semibold text-gray-900 mb-4">Address Information</h2>
+              <div className="space-y-4">
+                <div>
+                  <label htmlFor="address" className="block text-sm font-medium text-gray-700">
+                    Street Address
+                  </label>
+                  <input
+                    type="text"
+                    name="address"
+                    id="address"
+                    value={formData.address}
+                    onChange={handleInputChange}
+                    className="form-input mt-1"
+                    placeholder="Enter street address"
+                  />
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                  <div>
+                    <label htmlFor="city" className="block text-sm font-medium text-gray-700">
+                      City
+                    </label>
+                    <input
+                      type="text"
+                      name="city"
+                      id="city"
+                      value={formData.city}
+                      onChange={handleInputChange}
+                      className="form-input mt-1"
+                      placeholder="Enter city"
+                    />
+                  </div>
+
+                  <div>
+                    <label htmlFor="state" className="block text-sm font-medium text-gray-700">
+                      State
+                    </label>
+                    <input
+                      type="text"
+                      name="state"
+                      id="state"
+                      value={formData.state}
+                      onChange={handleInputChange}
+                      className="form-input mt-1"
+                      placeholder="Enter state"
+                    />
+                  </div>
+
+                  <div>
+                    <label htmlFor="pincode" className="block text-sm font-medium text-gray-700">
+                      Pincode
+                    </label>
+                    <input
+                      type="text"
+                      name="pincode"
+                      id="pincode"
+                      value={formData.pincode}
+                      onChange={handleInputChange}
+                      className="form-input mt-1"
+                      placeholder="Enter pincode"
+                    />
+                  </div>
                 </div>
               </div>
             </div>

@@ -10,9 +10,17 @@ const billSchema = new mongoose.Schema({
     type: String,
     required: true
   },
+  customerNames: {
+    type: [String],
+    default: []
+  },
   roomNumber: {
     type: String,
     required: true
+  },
+  roomNumbers: {
+    type: [String],
+    default: []
   },
   mobileNo: {
     type: String,
@@ -35,6 +43,22 @@ const billSchema = new mongoose.Schema({
   },
   checkOutDate: {
     type: Date
+  },
+  address: {
+    type: String,
+    default: ''
+  },
+  city: {
+    type: String,
+    default: ''
+  },
+  state: {
+    type: String,
+    default: ''
+  },
+  pincode: {
+    type: String,
+    default: ''
   },
   subtotal: {
     type: Number,

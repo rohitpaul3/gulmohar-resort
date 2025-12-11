@@ -19,6 +19,9 @@ export const billsAPI = {
   
   // Create new bill
   create: (billData) => api.post('/bills', billData),
+  
+  // Delete bill
+  delete: (id) => api.delete(`/bills/${id}`),
 };
 
 // Monthly Summary API

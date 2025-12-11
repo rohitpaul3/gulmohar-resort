@@ -5,7 +5,8 @@ import {
   Search, 
   Download, 
   Eye, 
-  RefreshCw
+  RefreshCw,
+  Trash2
 } from 'lucide-react';
 import moment from 'moment';
 
@@ -79,6 +80,19 @@ const ViewBills = () => {
       roomCharges: bill.roomCharges || 0
     };
     await generateBillPDF(billWithRoomCharges);
+  };
+
+  const handleDeleteBill = async (billId, billNumber) => {
+    if (window.confirm(`Are you sure you want to delete bill ${billNumber}? This action cannot be undone.`)) {
+      try {
+        await billsAPI.delete(billId);
+        alert('Bill deleted successfully!');
+        fetchBills();
+      } catch (error) {
+        console.error('Error deleting bill:', error);
+        alert('Failed to delete bill. Please try again.');
+      }
+    }
   };
 
   const handleSearchChange = (e) => {
@@ -292,6 +306,13 @@ const ViewBills = () => {
                           title="Download PDF"
                         >
                           <Download className="h-4 w-4" />
+                        </button>
+                        <button
+                          onClick={() => handleDeleteBill(bill.id, bill.billNumber)}
+                          className="p-2 text-red-600 hover:text-red-800 hover:bg-red-50 rounded-lg interactive transform-hover"
+                          title="Delete Bill"
+                        >
+                          <Trash2 className="h-4 w-4" />
                         </button>
                       </div>
                     </td>
