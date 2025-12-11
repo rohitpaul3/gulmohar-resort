@@ -8,8 +8,7 @@ import {
   TrendingUp, 
   Users,
   Calendar,
-  Trash2,
-  CalendarDays
+  Trash2
 } from 'lucide-react';
 import { billsAPI } from '../utils/api';
 import moment from 'moment';
@@ -113,13 +112,6 @@ const Dashboard = () => {
       color: 'bg-blue-600 hover:bg-blue-700 text-white'
     },
     {
-      name: 'Room Calendar',
-      description: 'View availability and bookings',
-      href: '/calendar',
-      icon: CalendarDays,
-      color: 'bg-cyan-600 hover:bg-cyan-700 text-white'
-    },
-    {
       name: 'Delete Bills',
       description: 'Remove bills from the system',
       href: '/view-bills',
@@ -187,7 +179,7 @@ const Dashboard = () => {
       {/* Quick Actions */}
       <div className="animate-scaleIn">
         <h2 className="text-lg font-medium text-gray-900 mb-4">Quick Actions</h2>
-        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-6">
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-5">
           {quickActions.map((action, index) => (
             <Link
               key={action.name}

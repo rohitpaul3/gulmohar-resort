@@ -7,7 +7,6 @@ import CreateBill from './components/CreateBill';
 import ViewBills from './components/ViewBills';
 import MonthlySummary from './components/MonthlySummary';
 import Expenditures from './components/Expenditures';
-import Calendar from './components/Calendar';
 
 function App() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -27,7 +26,6 @@ function App() {
                 <Route path="/dashboard" element={<Dashboard />} />
                 <Route path="/create-bill" element={<CreateBill />} />
                 <Route path="/view-bills" element={<ViewBills />} />
-                <Route path="/calendar" element={<Calendar />} />
                 <Route path="/monthly-summary" element={<MonthlySummary />} />
                 <Route path="/expenditures" element={<Expenditures />} />
               </Routes>

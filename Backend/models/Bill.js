@@ -80,6 +80,14 @@ const billSchema = new mongoose.Schema({
     type: Number,
     required: true
   },
+  advanceAmount: {
+    type: Number,
+    default: 0
+  },
+  dueAmount: {
+    type: Number,
+    default: 0
+  },
   createdAt: {
     type: Date,
     default: Date.now

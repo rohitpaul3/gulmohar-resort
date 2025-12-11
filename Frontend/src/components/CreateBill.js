@@ -17,7 +17,9 @@ const CreateBill = () => {
     address: '',
     city: '',
     state: '',
-    pincode: ''
+    pincode: '',
+    advanceAmount: '',
+    dueAmount: ''
   });
   
   const [loading, setLoading] = useState(false);
@@ -414,6 +416,46 @@ const CreateBill = () => {
                     min="0"
                     step="0.01"
                     value={formData.otherCharges}
+                    onChange={handleInputChange}
+                    className="form-input mt-1"
+                    placeholder="0.00"
+                  />
+                </div>
+              </div>
+            </div>
+
+            {/* Advance & Due Amount */}
+            <div className="card transform-hover border-animated">
+              <h2 className="text-lg font-semibold text-gray-900 mb-4">Payment Details</h2>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <label htmlFor="advanceAmount" className="block text-sm font-medium text-gray-700">
+                    Advance Amount (₹)
+                  </label>
+                  <input
+                    type="number"
+                    name="advanceAmount"
+                    id="advanceAmount"
+                    min="0"
+                    step="0.01"
+                    value={formData.advanceAmount}
+                    onChange={handleInputChange}
+                    className="form-input mt-1"
+                    placeholder="0.00"
+                  />
+                </div>
+                
+                <div>
+                  <label htmlFor="dueAmount" className="block text-sm font-medium text-gray-700">
+                    Due Amount (₹)
+                  </label>
+                  <input
+                    type="number"
+                    name="dueAmount"
+                    id="dueAmount"
+                    min="0"
+                    step="0.01"
+                    value={formData.dueAmount}
                     onChange={handleInputChange}
                     className="form-input mt-1"
                     placeholder="0.00"

@@ -259,6 +259,8 @@ const ViewBills = () => {
                   <th>Other ₹</th>
                   <th>Tax ₹</th>
                   <th>Total ₹</th>
+                  <th>Advance ₹</th>
+                  <th>Due ₹</th>
                   <th>Actions</th>
                 </tr>
               </thead>
@@ -298,6 +300,8 @@ const ViewBills = () => {
                       </div>
                     </td>
                     <td className="font-bold text-gulmohar">₹{bill.grandTotal.toFixed(2)}</td>
+                    <td className="text-green-600 font-medium">₹{(bill.advanceAmount || 0).toFixed(2)}</td>
+                    <td className="text-red-600 font-medium">₹{(bill.dueAmount || 0).toFixed(2)}</td>
                     <td>
                       <div className="flex space-x-2">
                         <button

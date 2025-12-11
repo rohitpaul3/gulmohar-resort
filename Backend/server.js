@@ -89,7 +89,9 @@ app.post('/api/bills', async (req, res) => {
       city,
       state,
       pincode,
-      billNumber
+      billNumber,
+      advanceAmount,
+      dueAmount
     } = req.body;
 
     // Validate required fields
@@ -115,6 +117,8 @@ app.post('/api/bills', async (req, res) => {
       city: city || '',
       state: state || '',
       pincode: pincode || '',
+      advanceAmount: parseFloat(advanceAmount) || 0,
+      dueAmount: parseFloat(dueAmount) || 0,
       ...taxes,
       billNumber: billNumber || `GR${Date.now()}`
     });
